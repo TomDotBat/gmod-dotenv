@@ -137,7 +137,9 @@ function env.load(filePath)
 end
 
 setmetatable(env, {
-	__call = env.getString
+	__call = function(_, key, fallback)
+		env.getString(key, fallback)
+	end
 })
 
 env.load(".env")
