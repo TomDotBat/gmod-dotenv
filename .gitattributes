@@ -1,0 +1,5 @@
+*.md text eol=lf
+*.txt text eol=lf
+*.json text eol=lf
+*.lua text eol=lf
+*.vmt text eol=lf
