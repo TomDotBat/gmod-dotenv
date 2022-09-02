@@ -38,10 +38,12 @@ TEST_INTEGER=1
 TEST_UPPER_BOOLEAN=TRUE
 TEST_LOWER_BOOLEAN=FALSE
 TEST_MIXED_BOOLEAN=FaLsE #This still works, because why not?
-TEST_VALUE  =    What happens if we space things weirdly for no reason?                               #HELLO
-TEST_VALUE_QUOTED  =    "What happens if we space things weirdly for no reason?"                               #HELLO
+   TEST_VALUE  =    What happens if we space things weirdly for no reason?                               #HELLO
+ TEST_VALUE_QUOTED  =    "What happens if we space things weirdly for no reason?"                               #HELLO
+TEST_EMPTY= #This should be treated as nil
 =-100
  =Broken
+    =.19
 
 #End of .env...]]
 
@@ -56,7 +58,7 @@ local EXPECTED_KEYS = {
 	TEST_LOWER_BOOLEAN = true,
 	TEST_MIXED_BOOLEAN = true,
 	TEST_VALUE = true,
-	TEST_VALUE_QUOTED = true
+	TEST_VALUE_QUOTED = true,
 }
 
 local output
@@ -96,6 +98,13 @@ return {
 
 				expect(output["TEST_DOUBLE_QUOTES"])
 					.to.equal("Double Quotes!")
+			end
+		},
+		{
+			name = "Empty values should be treated as nil values",
+			func = function()
+				expect(output["TEST_EMPTY"])
+					.to.beNil()
 			end
 		},
 		{
