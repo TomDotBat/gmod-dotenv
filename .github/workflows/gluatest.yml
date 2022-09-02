@@ -9,4 +9,4 @@ on:
 
 jobs:
   run-tests:
-    uses: CFC-Servers/GLuaTest/.github/workflows/run_tests.yml@main
+    uses: TomDotBat/GLuaTest/.github/workflows/run_tests.yml@main
