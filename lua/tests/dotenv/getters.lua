@@ -99,7 +99,7 @@ return {
 		{--env
 			name = "The env table should be callable",
 			func = function()
-				expect(env)
+				expect(env, TEST_KEY)
 					.to.succeed()
 			end
 		},
