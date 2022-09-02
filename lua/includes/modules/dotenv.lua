@@ -45,7 +45,9 @@ end
 
 function env.getInteger(key, fallback)
 	local value = env.getNumber(key, fallback)
-	return isnumber(value) and math.floor(value)
+	if isnumber(value) then
+		return math.floor(value)
+	end
 end
 
 function env.getBoolean(key, fallback)
