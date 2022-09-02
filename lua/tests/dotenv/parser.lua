@@ -45,6 +45,20 @@ TEST_VALUE_QUOTED  =    "What happens if we space things weirdly for no reason?"
 
 #End of .env...]]
 
+local EXPECTED_KEYS = {
+	TEST_SINGLE_QUOTES = true,
+	TEST_DOUBLE_QUOTES = true,
+	TEST_STRING = true,
+	TEST_STRING_2 = true,
+	TEST_NUMBER = true,
+	TEST_INTEGER = true,
+	TEST_UPPER_BOOLEAN = true,
+	TEST_LOWER_BOOLEAN = true,
+	TEST_MIXED_BOOLEAN = true,
+	TEST_VALUE = true,
+	TEST_VALUE_QUOTED = true
+}
+
 local output
 
 return {
@@ -102,16 +116,12 @@ return {
 			end
 		},
 		{
-			name = "Empty lines should be ignored",
+			name = "Only expected keys should be present",
 			func = function()
-				expect(output[""])
-					.to.beNil()
-
-				expect(output[" "])
-					.to.beNil()
-
-				expect(output["\n"])
-					.to.beNil()
+				for key, _ in pairs(output) do
+					expect(EXPECTED_KEYS[key])
+						.to.beTrue()
+				end
 			end
 		}
 	}
