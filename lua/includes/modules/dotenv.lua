@@ -74,7 +74,7 @@ local function splitLineBySeparator(line)
 	local separatorPos = line:find("=")
 	if separatorPos then
 		return line:sub(1, separatorPos - 1),
-			line:sub(-separatorPos)
+			line:sub(separatorPos + 1)
 	end
 end
 
@@ -124,6 +124,7 @@ function env.parse(body)
 end
 
 local BASE_PATH = "GAME"
+
 function env.load(filePath)
 	assert(isstring(filePath), "File path must be a string.")
 
