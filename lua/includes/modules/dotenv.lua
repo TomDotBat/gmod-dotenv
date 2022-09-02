@@ -116,7 +116,7 @@ function env.parse(body)
 	for _, line in ipairs(body:Split("\n")) do
 		local pre, post = splitLineBySeparator(stripComment(line))
 		if pre and post then
-			output[pre:Trim():lower()] = extractValue(post)
+			output[pre:Trim():upper()] = extractValue(post)
 		end
 	end
 
