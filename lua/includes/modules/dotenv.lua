@@ -27,19 +27,116 @@
 	Created: 2nd September 2022
 --]]
 
-module("env", package.seeall)
+env = {}
+local keys = {}
 
-function getString(key, fallback)
+function env.getString(key, fallback)
+	assert(isstring(key), "Key must be a string.")
+	assert(fallback == nil or isstring(fallback), "Fallback must be a string or left empty.")
+
+	return keys[key] or fallback
 end
 
-function getNumber(key, fallback)
+function env.getNumber(key, fallback)
+	assert(fallback == nil or isnumber(fallback), "Fallback must be a number or left empty.")
+
+	return tonumber(env.getString(key)) or fallback
 end
 
-function getInteger(key, fallback)
+function env.getInteger(key, fallback)
+	local value = env.getNumber(key, fallback)
+	return isnumber(value) and math.floor(value)
 end
 
-function getBoolean(key, fallback)
+function env.getBoolean(key, fallback)
+	assert(fallback == nil or isbool(fallback), "Fallback must be a boolean or left empty.")
+
+	local value = env.getString(key)
+
+	if isstring(value) then
+		local lower = value:lower()
+
+		if lower == "true" then
+			return true
+		elseif lower == "false" then
+			return false
+		end
+	end
+
+	return fallback
 end
 
-function load(filePath)
+function env.getKeys()
+	return table.GetKeys(keys)
 end
+
+local function splitLineBySeparator(line)
+	local separatorPos = line:find("=")
+	if separatorPos then
+		return line:sub(1, separatorPos - 1),
+			line:sub(-separatorPos)
+	end
+end
+
+local function stripComment(text)
+	local commentStart = text:find("#")
+
+	return commentStart
+		and text:sub(1, commentStart - 1)
+		or text
+end
+
+local function getTextBetweenPair(text, char)
+	local length = text:len()
+	if text:sub(1, 1) == char and text:sub(length, length) == char then
+		return text:sub(2, length - 1)
+	end
+end
+
+local STRING_LITERAL_DECLARATORS = {"\"", "'"}
+
+local function extractValue(text)
+	text = text:Trim()
+
+	for _, declarator in ipairs(STRING_LITERAL_DECLARATORS) do
+		local value = getTextBetweenPair(text, declarator)
+		if value then
+			return value
+		end
+	end
+
+	return text
+end
+
+function env.parse(body)
+	assert(isstring(body), "Body must be a string.")
+
+	local output = {}
+
+	for _, line in ipairs(body:Split("\n")) do
+		local pre, post = splitLineBySeparator(stripComment(line))
+		if pre and post then
+			output[pre:Trim():lower()] = extractValue(post)
+		end
+	end
+
+	return output
+end
+
+local BASE_PATH = "GAME"
+function env.load(filePath)
+	assert(isstring(filePath), "File path must be a string.")
+
+	if not file.Exists(filePath, BASE_PATH) then
+		print("Attempted to load non-existent dotenv file at:", filePath)
+		return
+	end
+
+	keys = env.parse(file.Read(filePath), BASE_PATH)
+end
+
+setmetatable(env, {
+	__call = getString
+})
+
+env.load(".env")
