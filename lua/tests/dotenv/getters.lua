@@ -40,6 +40,17 @@ TEST_BOOLEAN=true
 TEST_UPPER_BOOLEAN=false
 TEST_MIXED_BOOLEAN=FaLsE]]
 
+local EXPECTED_KEYS = {
+	TEST_STRING = true,
+	TEST_NUMBER = true,
+	TEST_NEGATIVE_NUMBER = true,
+	TEST_INTEGER = true,
+	TEST_NEGATIVE_INTEGER = true,
+	TEST_BOOLEAN = true,
+	TEST_UPPER_BOOLEAN = true,
+	TEST_MIXED_BOOLEAN = true
+}
+
 return {
 	groupName = "Getters",
 	beforeEach  = function() --TODO: use beforeAll once gLuaTest has updated
@@ -224,7 +235,25 @@ return {
 			end
 		},
 
-		{--env
+		{ --getKeys
+			name = "getKeys returns a sequential table of expected keys",
+			func = function()
+				local keys = env.getKeys()
+
+				expect(keys)
+					.to.beA("table")
+
+				expect(#keys)
+					.to.equal(table.Count(EXPECTED_KEYS))
+
+				for _, key in ipairs(keys) do
+					expect(EXPECTED_KEYS[key])
+						.to.beTrue()
+				end
+			end
+		},
+
+		{ --env
 			name = "The env table should be callable",
 			func = function()
 				expect(env, TEST_KEY)
