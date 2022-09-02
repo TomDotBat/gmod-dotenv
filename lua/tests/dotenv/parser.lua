@@ -127,6 +127,9 @@ return {
 		{
 			name = "Only expected keys should be present",
 			func = function()
+				expect(#output)
+					.to.equal(#EXPECTED_KEYS)
+
 				for key, _ in pairs(output) do
 					expect(EXPECTED_KEYS[key])
 						.to.beTrue()
