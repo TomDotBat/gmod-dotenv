@@ -152,7 +152,7 @@ end
 
 setmetatable(env, {
 	__call = function(_, key, fallback)
-		env.getString(key, fallback)
+		return env.getString(key, fallback)
 	end
 })
 
