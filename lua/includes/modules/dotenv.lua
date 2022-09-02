@@ -45,7 +45,9 @@ end
 
 function env.getInteger(key, fallback)
 	local value = env.getNumber(key, fallback)
-	return isnumber(value) and math.floor(value)
+	if isnumber(value) then
+		return math.floor(value)
+	end
 end
 
 function env.getBoolean(key, fallback)
@@ -74,7 +76,7 @@ local function splitLineBySeparator(line)
 	local separatorPos = line:find("=")
 	if separatorPos then
 		return line:sub(1, separatorPos - 1),
-			line:sub(-separatorPos)
+			line:sub(separatorPos + 1)
 	end
 end
 
@@ -108,6 +110,12 @@ local function extractValue(text)
 	return text
 end
 
+local function isEmpty(text)
+	return text == nil
+		or text == ""
+		or text == " "
+end
+
 function env.parse(body)
 	assert(isstring(body), "Body must be a string.")
 
@@ -115,8 +123,14 @@ function env.parse(body)
 
 	for _, line in ipairs(body:Split("\n")) do
 		local pre, post = splitLineBySeparator(stripComment(line))
+
 		if pre and post then
-			output[pre:Trim():lower()] = extractValue(post)
+			local key = pre:Trim():upper()
+			local value = extractValue(post)
+
+			if not (isEmpty(key) or isEmpty(value)) then
+				output[key] = value
+			end
 		end
 	end
 
@@ -124,6 +138,7 @@ function env.parse(body)
 end
 
 local BASE_PATH = "GAME"
+
 function env.load(filePath)
 	assert(isstring(filePath), "File path must be a string.")
 
@@ -136,7 +151,9 @@ function env.load(filePath)
 end
 
 setmetatable(env, {
-	__call = getString
+	__call = function(_, key, fallback)
+		return env.getString(key, fallback)
+	end
 })
 
 env.load(".env")
