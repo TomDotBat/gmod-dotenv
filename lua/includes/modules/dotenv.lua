@@ -108,6 +108,12 @@ local function extractValue(text)
 	return text
 end
 
+local function isEmpty(text)
+	return text == nil
+		or text == ""
+		or text == " "
+end
+
 function env.parse(body)
 	assert(isstring(body), "Body must be a string.")
 
@@ -115,8 +121,14 @@ function env.parse(body)
 
 	for _, line in ipairs(body:Split("\n")) do
 		local pre, post = splitLineBySeparator(stripComment(line))
+
 		if pre and post then
-			output[pre:Trim():upper()] = extractValue(post)
+			local key = pre:Trim():upper()
+			local value = extractValue(post)
+
+			if not (isEmpty(key) or isEmpty(value)) then
+				output[key] = value
+			end
 		end
 	end
 
