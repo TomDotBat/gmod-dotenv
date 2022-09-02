@@ -127,8 +127,8 @@ return {
 		{
 			name = "Only expected keys should be present",
 			func = function()
-				expect(#output)
-					.to.equal(#EXPECTED_KEYS)
+				expect(table.Count(output))
+					.to.equal(table.Count(EXPECTED_KEYS))
 
 				for key, _ in pairs(output) do
 					expect(EXPECTED_KEYS[key])
