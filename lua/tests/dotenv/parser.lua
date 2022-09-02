@@ -92,27 +92,27 @@ return {
 			name = "Quotes should be stripped from values if a matching pair is found",
 			func = function()
 				expect(output["TEST_SINGLE_QUOTES"])
-					.to.beEqual("Single Quotes!")
+					.to.equal("Single Quotes!")
 
 				expect(output["TEST_DOUBLE_QUOTES"])
-					.to.beEqual("Double Quotes!")
+					.to.equal("Double Quotes!")
 			end
 		},
 		{
 			name = "Whitespace should be trimmed from keys and values",
 			func = function()
 				expect(output["TEST_VALUE"])
-					.to.beEqual("What happens if we space things weirdly for no reason?")
+					.to.equal("What happens if we space things weirdly for no reason?")
 
 				expect(output["TEST_VALUE_QUOTED"])
-					.to.beEqual("What happens if we space things weirdly for no reason?")
+					.to.equal("What happens if we space things weirdly for no reason?")
 			end
 		},
 		{
 			name = "Comments should stripped from values",
 			func = function()
 				expect(output["TEST_STRING_2"])
-					.to.beEqual("Hello World")
+					.to.equal("Hello World")
 			end
 		},
 		{
