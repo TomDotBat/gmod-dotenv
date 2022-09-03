@@ -3,7 +3,7 @@ A Lua implementation of .env for Garry's Mod.
 
 ## Features
 - Pure gLua implementation, no binary modules required - far less likely for a game update to break your server.
-- Provides an `env()` method which behaves the same as [gmsv_dot_env](https://github.com/owainjones74/gmsv_dot_env), making it easy to switch.
+- Provides an `env()` method which behaves the same as [gmsv_dot_env](https://github.com/owainjones74/gmsv_dot_env), making it easy to switch (see migration notes [here](https://github.com/TomDotBat/gmod-dotenv/wiki/Migrating-from-gmsv_dot_env)).
 - All `get{X}` methods support fallback values, making it easier to keep your dotenv file concise.
 - The parse method is exposed globally, allowing for other means of config distribution depending on your needs.
 
