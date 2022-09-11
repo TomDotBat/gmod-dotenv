@@ -147,7 +147,7 @@ function env.load(filePath)
 		return
 	end
 
-	keys = env.parse(file.Read(filePath), BASE_PATH)
+	keys = env.parse(file.Read(filePath, BASE_PATH))
 end
 
 setmetatable(env, {
