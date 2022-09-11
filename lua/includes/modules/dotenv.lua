@@ -155,5 +155,3 @@ setmetatable(env, {
 		return env.getString(key, fallback)
 	end
 })
-
-env.load(".env")
