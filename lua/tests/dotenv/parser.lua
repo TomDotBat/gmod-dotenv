@@ -33,6 +33,7 @@ TEST_SINGLE_QUOTES='Single Quotes!'
 TEST_DOUBLE_QUOTES="Double Quotes!"
 TEST_STRING=Hello World
 TEST_STRING_2=Hello World #I hope this comment doesn't cause any problems!
+TEST_STRING_3="Hello World #Not a comment!"
 TEST_NUMBER=1.23
 TEST_INTEGER=1
 TEST_UPPER_BOOLEAN=TRUE
@@ -52,6 +53,7 @@ local EXPECTED_KEYS = {
 	TEST_DOUBLE_QUOTES = true,
 	TEST_STRING = true,
 	TEST_STRING_2 = true,
+	TEST_STRING_3 = true,
 	TEST_NUMBER = true,
 	TEST_INTEGER = true,
 	TEST_UPPER_BOOLEAN = true,
@@ -122,6 +124,13 @@ return {
 			func = function()
 				expect(output["TEST_STRING_2"])
 					.to.equal("Hello World")
+			end
+		},
+		{
+			name = "Comments cannot be made within quoted string values",
+			func = function()
+				expect(output["TEST_STRING_3"])
+					.to.equal("Hello World #Not a comment!")
 			end
 		},
 		{
