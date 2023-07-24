@@ -48,23 +48,7 @@ TEST_HASHTAG_IN_QOUTES="This should not #break"
 TEST_WORST_CASE_VALUE="Hello \", how are you # today? I'm good thanks!"
 #End of .env...]]
 
-local EXPECTED_KEYS = {
-	TEST_SINGLE_QUOTES = true,
-	TEST_DOUBLE_QUOTES = true,
-	TEST_STRING = true,
-	TEST_STRING_2 = true,
-	TEST_NUMBER = true,
-	TEST_INTEGER = true,
-	TEST_UPPER_BOOLEAN = true,
-	TEST_LOWER_BOOLEAN = true,
-	TEST_MIXED_BOOLEAN = true,
-	TEST_VALUE = true,
-	TEST_VALUE_QUOTED = true,
-	TEST_HASHTAG_IN_QOUTES = true,
-	TEST_WORST_CASE_VALUE = true,
-}
-
-local EXPECTED_VALUES = {
+local EXPECTED_PAIRS = {
 	["TEST_SINGLE_QUOTES"] = "Single Quotes!",
 	["TEST_DOUBLE_QUOTES"] = "Double Quotes!",
 	["TEST_STRING"] = "Hello World",
@@ -120,12 +104,7 @@ return {
 			name = "Only expected keys should be present",
 			func = function()
 				expect(table.Count(output))
-					.to.equal(table.Count(EXPECTED_KEYS))
-
-				for key, _ in pairs(output) do
-					expect(EXPECTED_KEYS[key])
-						.to.beTrue()
-				end
+					.to.equal(table.Count(EXPECTED_PAIRS))
 			end
 		},
 		{
