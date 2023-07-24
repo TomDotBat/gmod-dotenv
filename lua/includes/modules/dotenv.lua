@@ -96,69 +96,63 @@ function env.getKeys()
 	return table.GetKeys(keys)
 end
 
-local function splitLineBySeparator(line)
-	local separatorPos = line:find("=")
-	if separatorPos then
-		return line:sub(1, separatorPos - 1),
-			line:sub(separatorPos + 1)
-	end
-end
-
-local function stripComment(text)
-	local commentStart = text:find("#")
-
-	return commentStart
-		and text:sub(1, commentStart - 1)
-		or text
-end
-
-local function getTextBetweenPair(text, char)
-	local length = text:len()
-	if text:sub(1, 1) == char and text:sub(length, length) == char then
-		return text:sub(2, length - 1)
-	end
-end
-
-local STRING_LITERAL_DECLARATORS = {"\"", "'"}
-
-local function extractValue(text)
-	text = text:Trim()
-
-	for _, declarator in ipairs(STRING_LITERAL_DECLARATORS) do
-		local value = getTextBetweenPair(text, declarator)
-		if value then
-			return value
-		end
-	end
-
-	return text
-end
-
-local function isEmpty(text)
-	return text == nil
-		or text == ""
-		or text == " "
-end
-
 --- Parses the body of a dotenv file.
 -- @tparam string the dotenv file body.
 -- @treturn {[string]=string,...} the variable keys associated with their values.
 function env.parse(body)
 	assert(isstring(body), "Body must be a string.")
-
 	local output = {}
+	-- Remove anything we can.
+	body = body:gsub("\r", "") -- Remove carriage returns.
+	body = body:gsub("\n+", "\n") -- Remove duplicate new lines.
+	body = body:gsub("^%s*(.-)%s*$", "%1") -- Remove leading and trailing whitespace.
+	local lines = string.Explode("\n", body)
 
-	for _, line in ipairs(body:Split("\n")) do
-		local pre, post = splitLineBySeparator(stripComment(line))
+	for i = #lines, 1, -1 do
+		--[[ CLEANING UP ]]
+		local line = lines[i]
+		if line:Trim() == "" then continue end
+		if line:sub(1, 1) == "#" then continue end
+		
+		local isInQoutes = false
+		local isEscaped = false
 
-		if pre and post then
-			local key = pre:Trim():upper()
-			local value = extractValue(post)
+		for j = 1, #line do
+			local char = line:sub(j, j)
 
-			if not (isEmpty(key) or isEmpty(value)) then
-				output[key] = value
+			if char == "\\" then
+				isEscaped = not isEscaped
+			end
+
+			if (char == "\"" or char == "'") and not isEscaped then
+				isInQoutes = not isInQoutes
+			end
+
+			if char == "#" and not isInQoutes then
+				line = line:sub(1, j - 1)
+				break
 			end
 		end
+
+		--[[ PARSING ]]
+		local key, value = line:match("^([^=]+)=(.*)$")
+
+		if not key or key:Trim() == "" then
+			ErrorNoHalt("Invalid dotenv line: " .. line .. "\n")
+			continue
+		end
+
+		if not value or value:Trim() == "" then
+			value = nil -- Treat empty values as nil.
+		end
+
+		if value then
+			value = value:gsub("^%s*(.-)%s*$", "%1") -- Remove leading and trailing whitespace.
+			value = value:gsub("^\"(.*)\"$", "%1") -- Remove double quotes.
+			value = value:gsub("^'(.*)'$", "%1") -- Remove single quotes.
+		end
+
+		output[key:Trim()] = value
 	end
 
 	return output
