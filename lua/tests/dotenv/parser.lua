@@ -78,6 +78,7 @@ local EXPECTED_VALUES = {
 	["TEST_VALUE_QUOTED"] = "What happens if we space things weirdly for no reason?",
 	["TEST_HASHTAG_IN_QOUTES"] = "This should not #break",
 	["TEST_WORST_CASE_VALUE"] = "Hello \\\", how are you # today? I'm good thanks!",
+	["TEST_EMPTY"] = nil, -- Empty values should be treated as nil
 }
 
 local output
@@ -107,40 +108,6 @@ return {
 
 				expect(output)
 					.to.beA("table")
-			end
-		},
-		{
-			name = "Quotes should be stripped from values if a matching pair is found",
-			func = function()
-				expect(output["TEST_SINGLE_QUOTES"])
-					.to.equal("Single Quotes!")
-
-				expect(output["TEST_DOUBLE_QUOTES"])
-					.to.equal("Double Quotes!")
-			end
-		},
-		{
-			name = "Empty values should be treated as nil values",
-			func = function()
-				expect(output["TEST_EMPTY"])
-					.to.beNil()
-			end
-		},
-		{
-			name = "Whitespace should be trimmed from keys and values",
-			func = function()
-				expect(output["TEST_VALUE"])
-					.to.equal("What happens if we space things weirdly for no reason?")
-
-				expect(output["TEST_VALUE_QUOTED"])
-					.to.equal("What happens if we space things weirdly for no reason?")
-			end
-		},
-		{
-			name = "Comments should stripped from values",
-			func = function()
-				expect(output["TEST_STRING_2"])
-					.to.equal("Hello World")
 			end
 		},
 		{
