@@ -44,7 +44,8 @@ TEST_EMPTY= #This should be treated as nil
 =-100
  =Broken
     =.19
-
+TEST_HASHTAG_IN_QOUTES="This should not #break"
+TEST_WORST_CASE_VALUE="Hello \", how are you # today? I'm good thanks!"
 #End of .env...]]
 
 local EXPECTED_KEYS = {
@@ -59,6 +60,24 @@ local EXPECTED_KEYS = {
 	TEST_MIXED_BOOLEAN = true,
 	TEST_VALUE = true,
 	TEST_VALUE_QUOTED = true,
+	TEST_HASHTAG_IN_QOUTES = true,
+	TEST_WORST_CASE_VALUE = true,
+}
+
+local EXPECTED_VALUES = {
+	["TEST_SINGLE_QUOTES"] = "Single Quotes!",
+	["TEST_DOUBLE_QUOTES"] = "Double Quotes!",
+	["TEST_STRING"] = "Hello World",
+	["TEST_STRING_2"] = "Hello World",
+	["TEST_NUMBER"] = 1.23,
+	["TEST_INTEGER"] = 1,
+	["TEST_UPPER_BOOLEAN"] = true,
+	["TEST_LOWER_BOOLEAN"] = false,
+	["TEST_MIXED_BOOLEAN"] = false,
+	["TEST_VALUE"] = "What happens if we space things weirdly for no reason?",
+	["TEST_VALUE_QUOTED"] = "What happens if we space things weirdly for no reason?",
+	["TEST_HASHTAG_IN_QOUTES"] = "This should not #break",
+	["TEST_WORST_CASE_VALUE"] = "Hello \", how are you # today? I'm good thanks!",
 }
 
 local output
@@ -133,6 +152,15 @@ return {
 				for key, _ in pairs(output) do
 					expect(EXPECTED_KEYS[key])
 						.to.beTrue()
+				end
+			end
+		},
+		{
+			name = "Values should be parsed correctly",
+			func = function()
+				for key, value in pairs(output) do
+					expect(value)
+						.to.equal(EXPECTED_VALUES[key])
 				end
 			end
 		}
