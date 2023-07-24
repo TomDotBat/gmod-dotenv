@@ -112,7 +112,7 @@ return {
 			func = function()
 				for key, value in pairs(output) do
 					expect(value)
-						.to.equal(EXPECTED_VALUES[key])
+						.to.equal(EXPECTED_PAIRS[key])
 				end
 			end
 		}
