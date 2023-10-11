@@ -148,7 +148,7 @@ function env.parse(body)
 		end
 
 		if value then
-			value = value:gsub("^%s*(.-)%s*$", "%1") -- Remove leading and trailing whitespace.
+			value = value:Trim() -- Remove leading and trailing whitespace.
 			value = value:gsub("^\"(.*)\"$", "%1") -- Remove double quotes.
 			value = value:gsub("^'(.*)'$", "%1") -- Remove single quotes.
 		end
