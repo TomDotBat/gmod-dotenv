@@ -102,6 +102,7 @@ end
 function env.parse(body)
 	assert(isstring(body), "Body must be a string.")
 	local output = {}
+	local errors = {}
 	-- Remove anything we can.
 	body = body:gsub("\r", "") -- Remove carriage returns.
 	body = body:gsub("\n+", "\n") -- Remove duplicate new lines.
@@ -138,7 +139,7 @@ function env.parse(body)
 		local key, value = line:match("^([^=]+)=(.*)$")
 
 		if not key or key:Trim() == "" then
-			ErrorNoHalt("Invalid dotenv line: " .. line .. "\n")
+			table.insert(errors, "Invalid Key: " .. line)
 			continue
 		end
 
@@ -155,7 +156,7 @@ function env.parse(body)
 		output[key:Trim()] = value
 	end
 
-	return output
+	return output, (table.Count(errors) > 0 and errors) or nil
 end
 
 local BASE_PATH = "GAME"
