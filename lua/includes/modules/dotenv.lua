@@ -106,7 +106,7 @@ function env.parse(body)
 	-- Remove anything we can.
 	body = body:gsub("\r", "") -- Remove carriage returns.
 	body = body:gsub("\n+", "\n") -- Remove duplicate new lines.
-	body = body:gsub("^%s*(.-)%s*$", "%1") -- Remove leading and trailing whitespace.
+	body = body:Trim() -- Remove leading and trailing whitespace.
 	local lines = string.Explode("\n", body)
 
 	for i = #lines, 1, -1 do
