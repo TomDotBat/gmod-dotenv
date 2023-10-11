@@ -112,9 +112,9 @@ function env.parse(body)
 	for i = #lines, 1, -1 do
 		--[[ CLEANING UP ]]
 		local line = lines[i]
-		if line:Trim() == "" then continue end
-		if line:sub(1, 1) == "#" then continue end
-		
+		if line:Trim() == "" then goto skip_env_line end
+		if line:sub(1, 1) == "#" then goto skip_env_line end
+	
 		local isInQoutes = false
 		local isEscaped = false
 
@@ -140,7 +140,7 @@ function env.parse(body)
 
 		if not key or key:Trim() == "" then
 			table.insert(errors, "Invalid Key: " .. line)
-			continue
+			goto skip_env_line
 		end
 
 		if not value or value:Trim() == "" then
@@ -154,6 +154,8 @@ function env.parse(body)
 		end
 
 		output[key:Trim()] = value
+
+		::skip_env_line::
 	end
 
 	return output, (table.Count(errors) > 0 and errors) or nil
