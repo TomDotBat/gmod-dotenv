@@ -117,16 +117,28 @@ function env.parse(body)
 	
 		local isInQoutes = false
 		local isEscaped = false
+		local shouldEscapeEnd = false
 
 		for j = 1, #line do
 			local char = line:sub(j, j)
 
+			if isEscaped then
+				shouldEscapeEnd = true
+			end
+
 			if char == "\\" then
-				isEscaped = not isEscaped
+				isEscaped = true
+				shouldEscapeEnd = false
 			end
 
 			if (char == "\"" or char == "'") and not isEscaped then
 				isInQoutes = not isInQoutes
+			end
+
+			-- this state should only be for 1 character at a time
+			if shouldEscapeEnd then
+				shouldEscapeEnd = false
+				isEscaped = false
 			end
 
 			if char == "#" and not isInQoutes then
