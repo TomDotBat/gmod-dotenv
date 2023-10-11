@@ -77,7 +77,7 @@ local EXPECTED_VALUES = {
 	["TEST_VALUE"] = "What happens if we space things weirdly for no reason?",
 	["TEST_VALUE_QUOTED"] = "What happens if we space things weirdly for no reason?",
 	["TEST_HASHTAG_IN_QOUTES"] = "This should not #break",
-	["TEST_WORST_CASE_VALUE"] = "Hello \\\", how are you # today? I'm good thanks!"
+	["TEST_WORST_CASE_VALUE"] = "Hello \\\", how are you # today? I'm good thanks! That\\\'s nice to #hear!"
 }
 
 local output
