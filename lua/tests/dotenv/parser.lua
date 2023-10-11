@@ -45,7 +45,7 @@ TEST_EMPTY= #This should be treated as nil
  =Broken
     =.19
 TEST_HASHTAG_IN_QOUTES="This should not #break"
-TEST_WORST_CASE_VALUE="Hello \", how are you # today? I'm good thanks!"
+TEST_WORST_CASE_VALUE="Hello \", how are you # today? I'm good thanks! That\'s nice to #hear!"
 #End of .env...]]
 
 local EXPECTED_KEYS = {
