@@ -163,6 +163,23 @@ return {
 						.to.equal(EXPECTED_VALUES[key])
 				end
 			end
+		},
+		{
+			name = "Second return value should contain errors if parser had found errors",
+			func = function()
+				local _, errors = env.parse("abc")
+
+				expect(errors).toNot.beNil()
+				expect(errors).to.beA( "table" )
+			end
+		},
+		{
+			name = "Second return value should be nil if parser had no errors",
+			func = function()
+				local _, errors = env.parse("a=b")
+
+				expect(errors).to.beNil()
+			end
 		}
 	}
 }
