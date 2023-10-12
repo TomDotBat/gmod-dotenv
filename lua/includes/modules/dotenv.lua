@@ -131,8 +131,11 @@ function env.parse(body)
 				shouldEscapeEnd = false
 			end
 
-			if (char == "\"" or char == "'") and not isEscaped then
-				isInQoutes = not isInQoutes
+			-- looks ugly but it works to prevent ' from stopping a " qoute and the other way around.
+			if (char == "\"" or char == "'") and not (isEscaped or isInQoutes) then
+				isInQoutes = char
+			elseif char == isInQoutes and not isEscaped then 
+				isInQoutes = false
 			end
 
 			-- this state should only be for 1 character at a time
