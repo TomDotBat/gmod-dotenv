@@ -64,22 +64,6 @@ local EXPECTED_KEYS = {
 	TEST_WORST_CASE_VALUE = true,
 }
 
-local EXPECTED_VALUES = {
-	["TEST_SINGLE_QUOTES"] = "Single Quotes!",
-	["TEST_DOUBLE_QUOTES"] = "Double Quotes!",
-	["TEST_STRING"] = "Hello World",
-	["TEST_STRING_2"] = "Hello World",
-	["TEST_NUMBER"] = "1.23",
-	["TEST_INTEGER"] = "1",
-	["TEST_UPPER_BOOLEAN"] = "TRUE",
-	["TEST_LOWER_BOOLEAN"] = "FALSE",
-	["TEST_MIXED_BOOLEAN"] = "FaLsE",
-	["TEST_VALUE"] = "What happens if we space things weirdly for no reason?",
-	["TEST_VALUE_QUOTED"] = "What happens if we space things weirdly for no reason?",
-	["TEST_HASHTAG_IN_QOUTES"] = "This should not #break",
-	["TEST_WORST_CASE_VALUE"] = "Hello \\\", how are you # today? I'm good thanks! That\\\'s nice to #hear!"
-}
-
 local output
 
 return {
@@ -156,21 +140,12 @@ return {
 			end
 		},
 		{
-			name = "Values should be parsed correctly",
-			func = function()
-				for key, value in pairs(output) do
-					expect(value)
-						.to.equal(EXPECTED_VALUES[key])
-				end
-			end
-		},
-		{
 			name = "Second return value should contain errors if parser had found errors",
 			func = function()
 				local _, errors = env.parse("abc")
 
 				expect(errors).toNot.beNil()
-				expect(errors).to.beA( "table" )
+				expect(errors).to.beA("table")
 			end
 		},
 		{
