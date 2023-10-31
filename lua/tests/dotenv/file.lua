@@ -52,7 +52,7 @@ return {
 				env.load(TEST_FILE_PATH)
 
 				expect(fileExists)
-					.to.haveBeenCalled()
+					.was.called()
 			end
 		},
 		{
@@ -67,7 +67,7 @@ return {
 				env.load(TEST_FILE_PATH)
 
 				expect(readFile)
-					.to.haveBeenCalled()
+					.was.called()
 			end
 		},
 		{
@@ -85,7 +85,7 @@ return {
 				env.load(TEST_FILE_PATH)
 
 				expect(envParse)
-					.to.haveBeenCalled()
+					.was.called()
 			end
 		}
 	}

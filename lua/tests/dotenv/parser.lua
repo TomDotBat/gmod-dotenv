@@ -44,7 +44,8 @@ TEST_EMPTY= #This should be treated as nil
 =-100
  =Broken
     =.19
-
+TEST_HASHTAG_IN_QOUTES="This should not #break"
+TEST_WORST_CASE_VALUE="Hello \", how are you # today? I'm good thanks! That\'s nice to #hear!"
 #End of .env...]]
 
 local EXPECTED_KEYS = {
@@ -59,6 +60,8 @@ local EXPECTED_KEYS = {
 	TEST_MIXED_BOOLEAN = true,
 	TEST_VALUE = true,
 	TEST_VALUE_QUOTED = true,
+	TEST_HASHTAG_IN_QOUTES = true,
+	TEST_WORST_CASE_VALUE = true,
 }
 
 local output
@@ -134,6 +137,23 @@ return {
 					expect(EXPECTED_KEYS[key])
 						.to.beTrue()
 				end
+			end
+		},
+		{
+			name = "Second return value should contain errors if parser had found errors",
+			func = function()
+				local _, errors = env.parse("abc")
+
+				expect(errors).toNot.beNil()
+				expect(errors).to.beA("table")
+			end
+		},
+		{
+			name = "Second return value should be nil if parser had no errors",
+			func = function()
+				local _, errors = env.parse("a=b")
+
+				expect(errors).to.beNil()
 			end
 		}
 	}
